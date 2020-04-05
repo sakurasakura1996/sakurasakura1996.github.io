@@ -1,6 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>LeetCode problem460 LFU缓存</title>
+    <url>/2020/04/05/460%20LFU%E7%BC%93%E5%AD%98/</url>
+    <content><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>设计并实现最不经常使用（LFU）缓存的数据结构。它应该支持以下操作：get 和 put。</p>
+<p>get(key) - 如果键存在于缓存中，则获取键的值（总是正数），否则返回 -1。</p>
+<p>put(key, value) - 如果键不存在，请设置或插入值。当缓存达到其容量时，它应该在插入新项目之前，使最不经常使用的项目无效。在此问题中，当存在平局（即两个或更多个键具有相同使用频率）时，最近最少使用的键将被去除。</p>
+<p>进阶：</p>
+<p>你是否可以在 O(1) 时间复杂度内执行两项操作？</p>
+<p>示例：</p>
+<p>LFUCache cache = new LFUCache( 2 /<em> capacity (缓存容量) </em>/ );</p>
+<p>cache.put(1, 1);</p>
+<p>cache.put(2, 2);</p>
+<p>cache.get(1);       // 返回 1</p>
+<p>cache.put(3, 3);    // 去除 key 2</p>
+<p>cache.get(2);       // 返回 -1 (未找到key 2)</p>
+<p>cache.get(3);       // 返回 3</p>
+<p>cache.put(4, 4);    // 去除 key 1</p>
+<p>cache.get(1);       // 返回 -1 (未找到 key 1)</p>
+<p>cache.get(3);       // 返回 3</p>
+<p>cache.get(4);       // 返回 4</p>
+<p>来源：力扣（LeetCode）</p>
+<p>链接：<a href="https://leetcode-cn.com/problems/lfu-cache" target="_blank" rel="noopener">https://leetcode-cn.com/problems/lfu-cache</a></p>
+<p>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>开始觉得可以加入一个有序字典，但是后来实现的时候还是不够用。</p>
+<p>且看官方题解吧，自己的编程能力还是太水了：</p>
+<p>方法二：双哈希表</p>
+<p>思路和算法</p>
+<p>我们定义两个哈希表，第一个 freq_table 以频率 freq 为索引，每个索引存放一个双向链表，这个链表里存放所有使用频率为 freq 的缓存，缓存里存放三个信息，分别为键 key，值 value，以及使用频率 freq。第二个 key_table 以键值 key 为索引，每个索引存放对应缓存在 freq_table 中链表里的内存地址，这样我们就能利用两个哈希表来使得两个操作的时间复杂度均为 O(1)O(1)。同时需要记录一个当前缓存最少使用的频率 minFreq，这是为了删除操作服务的。</p>
+<p>对于 get(key) 操作，我们能通过索引 key 在 key_table 中找到缓存在 freq_table 中的链表的内存地址，如果不存在直接返回 -1，否则我们能获取到对应缓存的相关信息，这样我们就能知道缓存的键值还有使用频率，直接返回 key 对应的值即可。</p>
+<p>但是我们注意到 get 操作后这个缓存的使用频率加一了，所以我们需要更新缓存在哈希表 freq_table 中的位置。已知这个缓存的键 key，值 value，以及使用频率 freq，那么该缓存应该存放到 freq_table 中 freq + 1 索引下的链表中。所以我们在当前链表中 O(1)O(1) 删除该缓存对应的节点，根据情况更新 minFreq 值，然后将其O(1)O(1) 插入到 freq + 1 索引下的链表头完成更新。这其中的操作复杂度均为 O(1)O(1)。你可能会疑惑更新的时候为什么是插入到链表头，这其实是为了保证缓存在当前链表中从链表头到链表尾的插入时间是有序的，为下面的删除操作服务。</p>
+<p>对于 put(key, value) 操作，我们先通过索引 key在 key_table 中查看是否有对应的缓存，如果有的话，其实操作等价于 get(key) 操作，唯一的区别就是我们需要将当前的缓存里的值更新为 value。如果没有的话，相当于是新加入的缓存，如果缓存已经到达容量，需要先删除最近最少使用的缓存，再进行插入。</p>
+<p>先考虑插入，由于是新插入的，所以缓存的使用频率一定是 1，所以我们将缓存的信息插入到 freq_table 中 1 索引下的列表头即可，同时更新 key_table[key] 的信息，以及更新 minFreq = 1。</p>
+<p>那么剩下的就是删除操作了，由于我们实时维护了 minFreq，所以我们能够知道 freq_table 里目前最少使用频率的索引，同时因为我们保证了链表中从链表头到链表尾的插入时间是有序的，所以 freq_table[minFreq] 的链表中链表尾的节点即为使用频率最小且插入时间最早的节点，我们删除它同时根据情况更新 minFreq ，整个时间复杂度均为 O(1)O(1)。</p>
+<p>作者：LeetCode-Solution</p>
+<p>链接：<a href="https://leetcode-cn.com/problems/lfu-cache/solution/lfuhuan-cun-by-leetcode-solution/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/lfu-cache/solution/lfuhuan-cun-by-leetcode-solution/</a></p>
+<p>来源：力扣（LeetCode）</p>
+<p>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class Node:</span><br><span class="line">    def __init__(self, key, val, pre&#x3D;None, nex&#x3D;None, freq&#x3D;0):</span><br><span class="line">        self.pre &#x3D; pre</span><br><span class="line">        self.nex &#x3D; nex</span><br><span class="line">        self.freq &#x3D; freq</span><br><span class="line">        self.val &#x3D; val</span><br><span class="line">        self.key &#x3D; key</span><br><span class="line">        </span><br><span class="line">    def insert(self, nex):  # 双向链表的插入节点操作</span><br><span class="line">        nex.pre &#x3D; self</span><br><span class="line">        nex.nex &#x3D; self.nex</span><br><span class="line">        self.nex.pre &#x3D; nex</span><br><span class="line">        self.nex &#x3D; nex</span><br><span class="line">    </span><br><span class="line">def create_linked_list():  # 空链表</span><br><span class="line">    head &#x3D; Node(0, 0)</span><br><span class="line">    tail &#x3D; Node(0, 0)</span><br><span class="line">    head.nex &#x3D; tail</span><br><span class="line">    tail.pre &#x3D; head</span><br><span class="line">    return (head, tail)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class LFUCache:</span><br><span class="line">    def __init__(self, capacity: int):</span><br><span class="line">        self.capacity &#x3D; capacity</span><br><span class="line">        self.size &#x3D; 0</span><br><span class="line">        self.minFreq &#x3D; 0</span><br><span class="line">        self.freqMap &#x3D; collections.defaultdict(create_linked_list)</span><br><span class="line">        self.keyMap &#x3D; &#123;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def delete(self, node):</span><br><span class="line">        if node.pre:</span><br><span class="line">            node.pre.nex &#x3D; node.nex</span><br><span class="line">            node.nex.pre &#x3D; node.pre</span><br><span class="line">            if node.pre is self.freqMap[node.freq][0] and node.nex is self.freqMap[node.freq][-1]:</span><br><span class="line">                self.freqMap.pop(node.freq)</span><br><span class="line">        return node.key</span><br><span class="line">        </span><br><span class="line">    def increase(self, node):</span><br><span class="line">        node.freq +&#x3D; 1</span><br><span class="line">        self.delete(node)</span><br><span class="line">        self.freqMap[node.freq][-1].pre.insert(node)</span><br><span class="line">        if node.freq &#x3D;&#x3D; 1:</span><br><span class="line">            self.minFreq &#x3D; 1</span><br><span class="line">        elif self.minFreq &#x3D;&#x3D; node.freq - 1:</span><br><span class="line"># 如果这个新调用的node freq值原来是最小freq值，那么就要看他原来所在的双链表中</span><br><span class="line">#除了head tail结点外是否还有节点，如果有就不动，如果没有，那么minfreq也要+1了</span><br><span class="line">            head, tail &#x3D; self.freqMap[node.freq - 1]</span><br><span class="line">            if head.nex is tail:</span><br><span class="line">                self.minFreq &#x3D; node.freq</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def get(self, key: int) -&gt; int:</span><br><span class="line">        if key in self.keyMap:</span><br><span class="line">            self.increase(self.keyMap[key])</span><br><span class="line">            return self.keyMap[key].val</span><br><span class="line">        return -1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def put(self, key: int, value: int) -&gt; None:</span><br><span class="line">        if self.capacity !&#x3D; 0:</span><br><span class="line">            if key in self.keyMap:</span><br><span class="line">                node &#x3D; self.keyMap[key]</span><br><span class="line">                node.val &#x3D; value</span><br><span class="line">            else:</span><br><span class="line">                node &#x3D; Node(key, value)</span><br><span class="line">                self.keyMap[key] &#x3D; node</span><br><span class="line">                self.size +&#x3D; 1</span><br><span class="line">            if self.size &gt; self.capacity:</span><br><span class="line">                self.size -&#x3D; 1</span><br><span class="line">                deleted &#x3D; self.delete(self.freqMap[self.minFreq][0].nex)</span><br><span class="line">                self.keyMap.pop(deleted)</span><br><span class="line">            self.increase(node)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">作者：LeetCode-Solution</span><br><span class="line">链接：https:&#x2F;&#x2F;leetcode-cn.com&#x2F;problems&#x2F;lfu-cache&#x2F;solution&#x2F;lfuhuan-cun-by-leetcode-solution&#x2F;</span><br><span class="line">来源：力扣（LeetCode）</span><br><span class="line">著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</span><br></pre></td></tr></table></figure>
+<p>这里面的思考过程对我来说还是比较复杂的，日后一定要来重写</p>
+]]></content>
+      <categories>
+        <category>学习</category>
+        <category>数据结构与算法</category>
+        <category>LeetCode</category>
+      </categories>
+      <tags>
+        <tag>LeetCode</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>google_colab 调试faster rcnn识虫</title>
     <url>/2020/03/30/google-colab%E8%B0%83%E8%AF%95faster%20rcnn%E8%AF%86%E8%99%AB/</url>
     <content><![CDATA[<h1 id="一、本地数据集的制作"><a href="#一、本地数据集的制作" class="headerlink" title="一、本地数据集的制作"></a>一、本地数据集的制作</h1><p>首先从百度PandlePandle平台上获得了虫子的数据，原先已经在google colab上跑通了faster rcnn的源码，跑通的部分记录放在CSDN上面的。那部分的过程主要还是根据别人的教程一步一步来实现的，训练测试的数据是VOC2007</p>
@@ -52,7 +101,7 @@
   </entry>
   <entry>
     <title>google_colab 实验yolov3</title>
-    <url>/2020/03/30/google%20colab%E5%AE%9E%E9%AA%8CYOLOv3/</url>
+    <url>/2020/03/30/google_colab_yolov3/</url>
     <content><![CDATA[<p>Github代码地址：<a href="https://github.com/sakurasakura1996/PyTorch-YOLOv3" target="_blank" rel="noopener">https://github.com/sakurasakura1996/PyTorch-YOLOv3</a></p>
 <p>配套的教程还是比较详细的，就是教程是根据coco数据集来训练的，我们要先下载coco数据集，train加val的都特么快20G了，我不能保存在goole drive里面，所以下载下来一旦掉线就木了，难受啊，这里记录的时候还没有下好数据集，这里主要是记录后面训练自己的自定义的数据集，他这个数据集的布局好像不太常见，所以要把虫的数据集改为适用的数据集还是比较麻烦的。</p>
 <h1 id="自定义数据制作"><a href="#自定义数据制作" class="headerlink" title="自定义数据制作"></a>自定义数据制作</h1><p>需要的改动是：</p>
@@ -83,7 +132,7 @@
 <p>再记录下检测数据不准确的可能原因。我感觉可能是我标注数据的问题，因为原来AI_Studio的数据集中目标框的信息是左上角和右小角的x，y坐标。而yolov3需要的目标框的信息是中心点坐标和宽度高度，且四个数据都是经过标准化之后的显示，这里涉及到一个坐标系的问题，一张图片的哪个地方才是（0,0）点，我可能和该程序了解的不一样，所以后续还要确认一下是不是该问题，因为预测样本结果完全不正确啊。同时对比了一下该程序和之前实验的faster rcnn结果，yolov3将原图像进行了resize，分辨率变低了，faster rcnn分辨率要高一些。加油调试一下这次</p>
 <p>遇到的问题！</p>
 <p>现在的情况如下：后续结果好了，再来记录。</p>
-<img src="/2020/03/30/google%20colab%E5%AE%9E%E9%AA%8CYOLOv3/03/30/google%20colab%E5%AE%9E%E9%AA%8CYOLOv3/1.png" class title="1.png">
+<img src="/2020/03/30/google_colab_yolov3/03/30/google_colab_yolov3/1.png" class title="1.png">
 ]]></content>
       <categories>
         <category>学习</category>
@@ -92,55 +141,6 @@
       </categories>
       <tags>
         <tag>YOLOv3</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>LeetCode problem460 LFU缓存</title>
-    <url>/2020/04/05/460%20LFU%E7%BC%93%E5%AD%98/</url>
-    <content><![CDATA[<h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>设计并实现最不经常使用（LFU）缓存的数据结构。它应该支持以下操作：get 和 put。</p>
-<p>get(key) - 如果键存在于缓存中，则获取键的值（总是正数），否则返回 -1。</p>
-<p>put(key, value) - 如果键不存在，请设置或插入值。当缓存达到其容量时，它应该在插入新项目之前，使最不经常使用的项目无效。在此问题中，当存在平局（即两个或更多个键具有相同使用频率）时，最近最少使用的键将被去除。</p>
-<p>进阶：</p>
-<p>你是否可以在 O(1) 时间复杂度内执行两项操作？</p>
-<p>示例：</p>
-<p>LFUCache cache = new LFUCache( 2 /<em> capacity (缓存容量) </em>/ );</p>
-<p>cache.put(1, 1);</p>
-<p>cache.put(2, 2);</p>
-<p>cache.get(1);       // 返回 1</p>
-<p>cache.put(3, 3);    // 去除 key 2</p>
-<p>cache.get(2);       // 返回 -1 (未找到key 2)</p>
-<p>cache.get(3);       // 返回 3</p>
-<p>cache.put(4, 4);    // 去除 key 1</p>
-<p>cache.get(1);       // 返回 -1 (未找到 key 1)</p>
-<p>cache.get(3);       // 返回 3</p>
-<p>cache.get(4);       // 返回 4</p>
-<p>来源：力扣（LeetCode）</p>
-<p>链接：<a href="https://leetcode-cn.com/problems/lfu-cache" target="_blank" rel="noopener">https://leetcode-cn.com/problems/lfu-cache</a></p>
-<p>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>开始觉得可以加入一个有序字典，但是后来实现的时候还是不够用。</p>
-<p>且看官方题解吧，自己的编程能力还是太水了：</p>
-<p>方法二：双哈希表</p>
-<p>思路和算法</p>
-<p>我们定义两个哈希表，第一个 freq_table 以频率 freq 为索引，每个索引存放一个双向链表，这个链表里存放所有使用频率为 freq 的缓存，缓存里存放三个信息，分别为键 key，值 value，以及使用频率 freq。第二个 key_table 以键值 key 为索引，每个索引存放对应缓存在 freq_table 中链表里的内存地址，这样我们就能利用两个哈希表来使得两个操作的时间复杂度均为 O(1)O(1)。同时需要记录一个当前缓存最少使用的频率 minFreq，这是为了删除操作服务的。</p>
-<p>对于 get(key) 操作，我们能通过索引 key 在 key_table 中找到缓存在 freq_table 中的链表的内存地址，如果不存在直接返回 -1，否则我们能获取到对应缓存的相关信息，这样我们就能知道缓存的键值还有使用频率，直接返回 key 对应的值即可。</p>
-<p>但是我们注意到 get 操作后这个缓存的使用频率加一了，所以我们需要更新缓存在哈希表 freq_table 中的位置。已知这个缓存的键 key，值 value，以及使用频率 freq，那么该缓存应该存放到 freq_table 中 freq + 1 索引下的链表中。所以我们在当前链表中 O(1)O(1) 删除该缓存对应的节点，根据情况更新 minFreq 值，然后将其O(1)O(1) 插入到 freq + 1 索引下的链表头完成更新。这其中的操作复杂度均为 O(1)O(1)。你可能会疑惑更新的时候为什么是插入到链表头，这其实是为了保证缓存在当前链表中从链表头到链表尾的插入时间是有序的，为下面的删除操作服务。</p>
-<p>对于 put(key, value) 操作，我们先通过索引 key在 key_table 中查看是否有对应的缓存，如果有的话，其实操作等价于 get(key) 操作，唯一的区别就是我们需要将当前的缓存里的值更新为 value。如果没有的话，相当于是新加入的缓存，如果缓存已经到达容量，需要先删除最近最少使用的缓存，再进行插入。</p>
-<p>先考虑插入，由于是新插入的，所以缓存的使用频率一定是 1，所以我们将缓存的信息插入到 freq_table 中 1 索引下的列表头即可，同时更新 key_table[key] 的信息，以及更新 minFreq = 1。</p>
-<p>那么剩下的就是删除操作了，由于我们实时维护了 minFreq，所以我们能够知道 freq_table 里目前最少使用频率的索引，同时因为我们保证了链表中从链表头到链表尾的插入时间是有序的，所以 freq_table[minFreq] 的链表中链表尾的节点即为使用频率最小且插入时间最早的节点，我们删除它同时根据情况更新 minFreq ，整个时间复杂度均为 O(1)O(1)。</p>
-<p>作者：LeetCode-Solution</p>
-<p>链接：<a href="https://leetcode-cn.com/problems/lfu-cache/solution/lfuhuan-cun-by-leetcode-solution/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/lfu-cache/solution/lfuhuan-cun-by-leetcode-solution/</a></p>
-<p>来源：力扣（LeetCode）</p>
-<p>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class Node:</span><br><span class="line">    def __init__(self, key, val, pre&#x3D;None, nex&#x3D;None, freq&#x3D;0):</span><br><span class="line">        self.pre &#x3D; pre</span><br><span class="line">        self.nex &#x3D; nex</span><br><span class="line">        self.freq &#x3D; freq</span><br><span class="line">        self.val &#x3D; val</span><br><span class="line">        self.key &#x3D; key</span><br><span class="line">        </span><br><span class="line">    def insert(self, nex):  # 双向链表的插入节点操作</span><br><span class="line">        nex.pre &#x3D; self</span><br><span class="line">        nex.nex &#x3D; self.nex</span><br><span class="line">        self.nex.pre &#x3D; nex</span><br><span class="line">        self.nex &#x3D; nex</span><br><span class="line">    </span><br><span class="line">def create_linked_list():  # 空链表</span><br><span class="line">    head &#x3D; Node(0, 0)</span><br><span class="line">    tail &#x3D; Node(0, 0)</span><br><span class="line">    head.nex &#x3D; tail</span><br><span class="line">    tail.pre &#x3D; head</span><br><span class="line">    return (head, tail)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class LFUCache:</span><br><span class="line">    def __init__(self, capacity: int):</span><br><span class="line">        self.capacity &#x3D; capacity</span><br><span class="line">        self.size &#x3D; 0</span><br><span class="line">        self.minFreq &#x3D; 0</span><br><span class="line">        self.freqMap &#x3D; collections.defaultdict(create_linked_list)</span><br><span class="line">        self.keyMap &#x3D; &#123;&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def delete(self, node):</span><br><span class="line">        if node.pre:</span><br><span class="line">            node.pre.nex &#x3D; node.nex</span><br><span class="line">            node.nex.pre &#x3D; node.pre</span><br><span class="line">            if node.pre is self.freqMap[node.freq][0] and node.nex is self.freqMap[node.freq][-1]:</span><br><span class="line">                self.freqMap.pop(node.freq)</span><br><span class="line">        return node.key</span><br><span class="line">        </span><br><span class="line">    def increase(self, node):</span><br><span class="line">        node.freq +&#x3D; 1</span><br><span class="line">        self.delete(node)</span><br><span class="line">        self.freqMap[node.freq][-1].pre.insert(node)</span><br><span class="line">        if node.freq &#x3D;&#x3D; 1:</span><br><span class="line">            self.minFreq &#x3D; 1</span><br><span class="line">        elif self.minFreq &#x3D;&#x3D; node.freq - 1:</span><br><span class="line"># 如果这个新调用的node freq值原来是最小freq值，那么就要看他原来所在的双链表中</span><br><span class="line">#除了head tail结点外是否还有节点，如果有就不动，如果没有，那么minfreq也要+1了</span><br><span class="line">            head, tail &#x3D; self.freqMap[node.freq - 1]</span><br><span class="line">            if head.nex is tail:</span><br><span class="line">                self.minFreq &#x3D; node.freq</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def get(self, key: int) -&gt; int:</span><br><span class="line">        if key in self.keyMap:</span><br><span class="line">            self.increase(self.keyMap[key])</span><br><span class="line">            return self.keyMap[key].val</span><br><span class="line">        return -1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    def put(self, key: int, value: int) -&gt; None:</span><br><span class="line">        if self.capacity !&#x3D; 0:</span><br><span class="line">            if key in self.keyMap:</span><br><span class="line">                node &#x3D; self.keyMap[key]</span><br><span class="line">                node.val &#x3D; value</span><br><span class="line">            else:</span><br><span class="line">                node &#x3D; Node(key, value)</span><br><span class="line">                self.keyMap[key] &#x3D; node</span><br><span class="line">                self.size +&#x3D; 1</span><br><span class="line">            if self.size &gt; self.capacity:</span><br><span class="line">                self.size -&#x3D; 1</span><br><span class="line">                deleted &#x3D; self.delete(self.freqMap[self.minFreq][0].nex)</span><br><span class="line">                self.keyMap.pop(deleted)</span><br><span class="line">            self.increase(node)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">作者：LeetCode-Solution</span><br><span class="line">链接：https:&#x2F;&#x2F;leetcode-cn.com&#x2F;problems&#x2F;lfu-cache&#x2F;solution&#x2F;lfuhuan-cun-by-leetcode-solution&#x2F;</span><br><span class="line">来源：力扣（LeetCode）</span><br><span class="line">著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</span><br></pre></td></tr></table></figure>
-<p>这里面的思考过程对我来说还是比较复杂的，日后一定要来重写</p>
-]]></content>
-      <categories>
-        <category>学习</category>
-        <category>数据结构与算法</category>
-        <category>LeetCode</category>
-      </categories>
-      <tags>
-        <tag>LeetCode</tag>
       </tags>
   </entry>
 </search>
