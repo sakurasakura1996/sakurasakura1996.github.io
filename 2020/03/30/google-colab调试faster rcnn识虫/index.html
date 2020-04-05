@@ -22,7 +22,7 @@
 
   <meta name="description" content="一、本地数据集的制作首先从百度PandlePandle平台上获得了虫子的数据，原先已经在google colab上跑通了faster rcnn的源码，跑通的部分记录放在CSDN上面的。那部分的过程主要还是根据别人的教程一步一步来实现的，训练测试的数据是VOC2007 所以这里想自己将数据集格式改成VOC2007格式的，然后进行数据集的替换。然后训练测试来一发，看看自定义数据集的效果。 数据集的更改">
 <meta property="og:type" content="article">
-<meta property="og:title" content="google_colab">
+<meta property="og:title" content="google_colab 调试faster rcnn识虫">
 <meta property="og:url" content="http://yoursite.com/2020/03/30/google-colab%E8%B0%83%E8%AF%95faster%20rcnn%E8%AF%86%E8%99%AB/index.html">
 <meta property="og:site_name" content="SAKURA">
 <meta property="og:description" content="一、本地数据集的制作首先从百度PandlePandle平台上获得了虫子的数据，原先已经在google colab上跑通了faster rcnn的源码，跑通的部分记录放在CSDN上面的。那部分的过程主要还是根据别人的教程一步一步来实现的，训练测试的数据是VOC2007 所以这里想自己将数据集格式改成VOC2007格式的，然后进行数据集的替换。然后训练测试来一发，看看自定义数据集的效果。 数据集的更改">
@@ -39,10 +39,8 @@
 <meta property="og:image" content="https://uploader.shimo.im/f/zDJFi99x1kEqZnMX.jpg!thumbnail">
 <meta property="og:image" content="https://uploader.shimo.im/f/3peFDKe5x4Qco8s4.jpg!thumbnail">
 <meta property="article:published_time" content="2020-03-30T12:07:38.000Z">
-<meta property="article:modified_time" content="2020-04-01T08:09:35.628Z">
+<meta property="article:modified_time" content="2020-04-05T03:40:46.133Z">
 <meta property="article:author" content="SAKURA">
-<meta property="article:tag" content="AI">
-<meta property="article:tag" content="DL">
 <meta property="article:tag" content="Faster RCNN">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://uploader.shimo.im/f/KYJyz3Trgf8uqk8K.png!thumbnail">
@@ -60,7 +58,7 @@
   };
 </script>
 
-  <title>google_colab | SAKURA</title>
+  <title>google_colab 调试faster rcnn识虫 | SAKURA</title>
   
 
 
@@ -218,7 +216,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          google_colab
+          google_colab 调试faster rcnn识虫
         </h1>
 
         <div class="post-meta">
@@ -235,7 +233,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-01 16:09:35" itemprop="dateModified" datetime="2020-04-01T16:09:35+08:00">2020-04-01</time>
+                <time title="修改时间：2020-04-05 11:40:46" itemprop="dateModified" datetime="2020-04-05T11:40:46+08:00">2020-04-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -244,6 +242,14 @@
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/DL/" itemprop="url" rel="index"><span itemprop="name">DL</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/DL/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
                 </span>
             </span>
 
@@ -304,8 +310,6 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/AI/" rel="tag"># AI</a>
-              <a href="/tags/DL/" rel="tag"># DL</a>
               <a href="/tags/Faster-RCNN/" rel="tag"># Faster RCNN</a>
           </div>
 
@@ -316,8 +320,8 @@
     <div class="post-nav">
       <div class="post-nav-item"></div>
       <div class="post-nav-item">
-    <a href="/2020/04/01/google%20colab%E5%AE%9E%E9%AA%8CYOLOv3/" rel="next" title="google colab实验YOLOv3">
-      google colab实验YOLOv3 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/03/30/google%20colab%E5%AE%9E%E9%AA%8CYOLOv3/" rel="next" title="google_colab 实验yolov3">
+      google_colab 实验yolov3 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -394,14 +398,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
