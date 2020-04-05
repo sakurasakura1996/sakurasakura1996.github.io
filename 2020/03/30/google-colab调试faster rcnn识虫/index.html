@@ -27,23 +27,23 @@
 <meta property="og:site_name" content="SAKURA">
 <meta property="og:description" content="一、本地数据集的制作首先从百度PandlePandle平台上获得了虫子的数据，原先已经在google colab上跑通了faster rcnn的源码，跑通的部分记录放在CSDN上面的。那部分的过程主要还是根据别人的教程一步一步来实现的，训练测试的数据是VOC2007 所以这里想自己将数据集格式改成VOC2007格式的，然后进行数据集的替换。然后训练测试来一发，看看自定义数据集的效果。 数据集的更改">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://uploader.shimo.im/f/KYJyz3Trgf8uqk8K.png!thumbnail">
-<meta property="og:image" content="https://uploader.shimo.im/f/T4iuaM6UYHMvPPZO.jpg!thumbnail">
-<meta property="og:image" content="https://uploader.shimo.im/f/5260tsfjegM8hHJM.jpg!thumbnail">
-<meta property="og:image" content="https://uploader.shimo.im/f/n8FOshyeZhMK7mHO.jpg!thumbnail">
-<meta property="og:image" content="https://uploader.shimo.im/f/U6DibS8yCQMbCFNk.jpg!thumbnail">
-<meta property="og:image" content="https://uploader.shimo.im/f/z6ysr8ZpIRYFAl6w.jpg!thumbnail">
-<meta property="og:image" content="https://uploader.shimo.im/f/eWFDELbds9EJL2V8.jpg!thumbnail">
-<meta property="og:image" content="https://uploader.shimo.im/f/wGqes3JJmCsPdex9.jpg!thumbnail">
-<meta property="og:image" content="https://uploader.shimo.im/f/mSR0sor5RrwQcQX2.jpg!thumbnail">
-<meta property="og:image" content="https://uploader.shimo.im/f/zDJFi99x1kEqZnMX.jpg!thumbnail">
-<meta property="og:image" content="https://uploader.shimo.im/f/3peFDKe5x4Qco8s4.jpg!thumbnail">
+<meta property="og:image" content="http://yoursite.com/images/google_colab_faster_rcnn/1.png">
+<meta property="og:image" content="http://yoursite.com/images/google_colab_faster_rcnn/2.png">
+<meta property="og:image" content="http://yoursite.com/images/google_colab_faster_rcnn/3.png">
+<meta property="og:image" content="http://yoursite.com/images/google_colab_faster_rcnn/4.png">
+<meta property="og:image" content="http://yoursite.com/images/google_colab_faster_rcnn/5.png">
+<meta property="og:image" content="http://yoursite.com/images/google_colab_faster_rcnn/6.png">
+<meta property="og:image" content="http://yoursite.com/images/google_colab_faster_rcnn/7.png">
+<meta property="og:image" content="http://yoursite.com/images/google_colab_faster_rcnn/8.png">
+<meta property="og:image" content="http://yoursite.com/images/google_colab_faster_rcnn/9.png">
+<meta property="og:image" content="http://yoursite.com/images/google_colab_faster_rcnn/10.png">
+<meta property="og:image" content="http://yoursite.com/images/google_colab_faster_rcnn/11.png">
 <meta property="article:published_time" content="2020-03-30T12:07:38.000Z">
-<meta property="article:modified_time" content="2020-04-05T03:40:46.133Z">
+<meta property="article:modified_time" content="2020-04-05T08:08:09.271Z">
 <meta property="article:author" content="SAKURA">
 <meta property="article:tag" content="Faster RCNN">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://uploader.shimo.im/f/KYJyz3Trgf8uqk8K.png!thumbnail">
+<meta name="twitter:image" content="http://yoursite.com/images/google_colab_faster_rcnn/1.png">
 
 <link rel="canonical" href="http://yoursite.com/2020/03/30/google-colab%E8%B0%83%E8%AF%95faster%20rcnn%E8%AF%86%E8%99%AB/">
 
@@ -233,7 +233,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-05 11:40:46" itemprop="dateModified" datetime="2020-04-05T11:40:46+08:00">2020-04-05</time>
+                <time title="修改时间：2020-04-05 16:08:09" itemprop="dateModified" datetime="2020-04-05T16:08:09+08:00">2020-04-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -293,13 +293,13 @@
 网上的说法不尽相同，尝试了几次都没有搞对，后面自己去看了下源代码。简单介绍下<br>源文件的处理过程是先从trainval.txt 中读取出要训练验证的数据是哪些图片和xml，然后程序从对应的xml文件中读取出object标签下的信息，也就是一张图中所有的目标信息，这些目标信息再以程序自己的格式存储下来（也就是定义多个列表，比如位置信息），最后还要存储目标的类别信息，问题就出在这，程序会把读到的类别信息转成小写，然后再去字典（这个字典是几个类别分别对应的索引）查找该类索引，最后记录类别信息也就是记录字典的索引。因为字典中的类别key值有几个是大写，所以没有匹配上就一直报错啦。OK</li>
 </ul>
 <p>处理完这个错误之后继续训练，报错如下：</p>
-<p><img src="https://uploader.shimo.im/f/KYJyz3Trgf8uqk8K.png!thumbnail" alt="图片"></p>
+<p><img src="/images/google_colab_faster_rcnn/1.png" alt="图片"></p>
 <p>也不知道调试了多久，主要网上没找到相似的情况，所以把我都搞醉了，大概是去原作者的github中的说明中去找步骤，发现以前版本的代码有一个脚本文件，而新版本代码中倒是没有，上面报错的情况大概是配置的问题，有关GPU问题的，而且还是ROIAlign部分出的问题，本来这是Mask RCNN中才有的模块，原作者也说了他们提供了几种pooling技术而且都实现了，所以代码应该是默认用了Mask RCNN中更好的模块替代了 ROI Pooling吧。好了，说这么多其实对于后面解决该问题也没什么逻辑可言。</p>
 <p>我直觉觉得可能是模块编译出了问题，所以我就又编译了一下，还是不对。</p>
 <p>继续研究目录结构，在将作者的代码clone下来时，lib文件夹下并没有build文件夹，那就很好理解，肯定是编译的时候产生的啦，之前重新编译不行，那就大概率是因为编译文件已经产生了，就没有重新来一遍。我就果断的删除了build文件，重新编译，再次运行训练命令，果真开始训练了。那感觉，确实不错！</p>
 <p>后续train_net、 test_net、 demo都试了一下，不知道demo放入的数据是已经训练的数据还是啥原因，看起来也太准了吧。后面再仔细分类一下 百度的AI试虫数据集，把未训练的数据集放入项目中demo一下，看看准确率如何</p>
 <p>情况如下：</p>
-<p><img src="https://uploader.shimo.im/f/T4iuaM6UYHMvPPZO.jpg!thumbnail" alt="图片"><img src="https://uploader.shimo.im/f/5260tsfjegM8hHJM.jpg!thumbnail" alt="图片"><img src="https://uploader.shimo.im/f/n8FOshyeZhMK7mHO.jpg!thumbnail" alt="图片"><img src="https://uploader.shimo.im/f/U6DibS8yCQMbCFNk.jpg!thumbnail" alt="图片"><img src="https://uploader.shimo.im/f/z6ysr8ZpIRYFAl6w.jpg!thumbnail" alt="图片"><img src="https://uploader.shimo.im/f/eWFDELbds9EJL2V8.jpg!thumbnail" alt="图片"><img src="https://uploader.shimo.im/f/wGqes3JJmCsPdex9.jpg!thumbnail" alt="图片"><img src="https://uploader.shimo.im/f/mSR0sor5RrwQcQX2.jpg!thumbnail" alt="图片"><img src="https://uploader.shimo.im/f/zDJFi99x1kEqZnMX.jpg!thumbnail" alt="图片"><img src="https://uploader.shimo.im/f/3peFDKe5x4Qco8s4.jpg!thumbnail" alt="图片"></p>
+<p><img src="/images/google_colab_faster_rcnn/2.png" alt="图片"><br><img src="/images/google_colab_faster_rcnn/3.png" alt="图片"><br><img src="/images/google_colab_faster_rcnn/4.png" alt="图片"><br><img src="/images/google_colab_faster_rcnn/5.png" alt="图片"><br><img src="/images/google_colab_faster_rcnn/6.png" alt="图片"><br><img src="/images/google_colab_faster_rcnn/7.png" alt="图片"><br><img src="/images/google_colab_faster_rcnn/8.png" alt="图片"><br><img src="/images/google_colab_faster_rcnn/9.png" alt="图片"><br><img src="/images/google_colab_faster_rcnn/10.png" alt="图片"><br><img src="/images/google_colab_faster_rcnn/11.png" alt="图片"></p>
 <p>第二张和第六张中各有一个小目标都有重复框，第八张的预测不是很理想。后续就要改进这些不足了。还有的是，随机看了一张图 2571.jpg 也就是上面的第三张图  2571.xml中竟然给了七个框，我人都晕了。这是什么情况啊。</p>
 
     </div>
@@ -318,13 +318,10 @@
 
         
     <div class="post-nav">
+      <div class="post-nav-item"></div>
       <div class="post-nav-item">
-    <a href="/2020/03/30/google_colab_yolov3/" rel="prev" title="google_colab 实验yolov3">
-      <i class="fa fa-chevron-left"></i> google_colab 实验yolov3
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/04/05/460%20LFU%E7%BC%93%E5%AD%98/" rel="next" title="LeetCode problem460 LFU缓存">
-      LeetCode problem460 LFU缓存 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/03/30/google_colab_yolov3/" rel="next" title="google_colab 实验yolov3">
+      google_colab 实验yolov3 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
