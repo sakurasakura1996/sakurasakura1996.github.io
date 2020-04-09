@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="题目数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。 示例： 输入：n &#x3D; 3 输出：[    &quot;((()))&quot;,     &quot;(()())&quot;,     &quot;(())()&quot;,     &quot;()(())&quot;,     &quot;()()()&quot;   ] 来源：力扣（Leet">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode problem22 括号生成">
+<meta property="og:url" content="http://yoursite.com/2020/04/09/22%20%E6%8B%AC%E5%8F%B7%E7%94%9F%E6%88%90/index.html">
+<meta property="og:site_name" content="SAKURA">
+<meta property="og:description" content="题目数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。 示例： 输入：n &#x3D; 3 输出：[    &quot;((()))&quot;,     &quot;(()())&quot;,     &quot;(())()&quot;,     &quot;()(())&quot;,     &quot;()()()&quot;   ] 来源：力扣（Leet">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-04-09T08:03:04.000Z">
+<meta property="article:modified_time" content="2020-04-09T08:04:18.395Z">
+<meta property="article:author" content="SAKURA">
+<meta property="article:tag" content="LeetCode">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/04/09/22%20%E6%8B%AC%E5%8F%B7%E7%94%9F%E6%88%90/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>LeetCode problem22 括号生成 | SAKURA</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">SAKURA</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">sakura's blog for everything!</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/09/22%20%E6%8B%AC%E5%8F%B7%E7%94%9F%E6%88%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="SAKURA">
+      <meta itemprop="description" content="CS, AI, Daily Life">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SAKURA">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LeetCode problem22 括号生成
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-04-09 16:03:04 / 修改时间：16:04:18" itemprop="dateCreated datePublished" datetime="2020-04-09T16:03:04+08:00">2020-04-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">学习</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">数据结构与算法</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/LeetCode/" itemprop="url" rel="index"><span itemprop="name">LeetCode</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。</p>
+<p>示例：</p>
+<p>输入：n = 3</p>
+<p>输出：[</p>
+<pre><code>   &quot;((()))&quot;,
+
+   &quot;(()())&quot;,
+
+   &quot;(())()&quot;,
+
+   &quot;()(())&quot;,
+
+   &quot;()()()&quot;
+
+ ]
+</code></pre><p>来源：力扣（LeetCode）</p>
+<p>链接：<a href="https://leetcode-cn.com/problems/generate-parentheses" target="_blank" rel="noopener">https://leetcode-cn.com/problems/generate-parentheses</a></p>
+<p>著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。</p>
+<h2 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h2><p><strong>方法一：暴力法</strong></p>
+<p>这个方法着实有点僵硬，因为如果暴力列举的话，有2^(2n)个序列，然后检查每一个是否有效，检查每一个的时间复杂度是O(n)，那么总的时间复杂度是O(n*2^(2n))。</p>
+<p><strong>算法</strong></p>
+<p>为了生成所有序列，我们可以使用递归。长度为 n 的序列就是在长度为 n-1 的序列前加一个 ‘(‘ 或 ‘)’。</p>
+<p>为了检查序列是否有效，我们遍历这个序列，并使用一个变量 balance 表示左括号的数量减去右括号的数量。如果在遍历过程中 balance 的值小于零，或者结束时 balance 的值不为零，那么该序列就是无效的，否则它是有效的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">class Solution:</span><br><span class="line">    def generateParenthesis(self, n: int) -&gt; List[str]:</span><br><span class="line">        def generate(A):</span><br><span class="line">            if len(A) &#x3D;&#x3D; 2*n:</span><br><span class="line">                if valid(A):</span><br><span class="line">                    ans.append(&quot;&quot;.join(A))</span><br><span class="line">            else:</span><br><span class="line">                A.append(&#39;(&#39;)</span><br><span class="line">                generate(A)</span><br><span class="line">                A.pop()</span><br><span class="line">                A.append(&#39;)&#39;)</span><br><span class="line">                generate(A)</span><br><span class="line">                A.pop()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        def valid(A):</span><br><span class="line">            bal &#x3D; 0</span><br><span class="line">            for c in A:</span><br><span class="line">                if c &#x3D;&#x3D; &#39;(&#39;: bal +&#x3D; 1</span><br><span class="line">                else: bal -&#x3D; 1</span><br><span class="line">                if bal &lt; 0: return False</span><br><span class="line">            return bal &#x3D;&#x3D; 0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        ans &#x3D; []</span><br><span class="line">        generate([])</span><br><span class="line">        return ans</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">作者：LeetCode-Solution</span><br><span class="line">链接：https:&#x2F;&#x2F;leetcode-cn.com&#x2F;problems&#x2F;generate-parentheses&#x2F;solution&#x2F;gua-hao-sheng-cheng-by-leetcode-solution&#x2F;</span><br><span class="line">来源：力扣（LeetCode）</span><br><span class="line">著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</span><br></pre></td></tr></table></figure>
+<p><strong>方法二：回溯法</strong></p>
+<p><strong>思路和算法</strong></p>
+<p>方法一还有改进的余地：我们可以只在序列仍然保持有效时才添加 ‘(‘ or ‘)’，而不是像 方法一 那样每次添加。我们可以通过跟踪到目前为止放置的左括号和右括号的数目来做到这一点，</p>
+<p>如果左括号数量不大于 nn，我们可以放一个左括号。如果右括号数量小于左括号的数量，我们可以放一个右括号。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">class Solution:</span><br><span class="line">    def generateParenthesis(self, n: int) -&gt; List[str]:</span><br><span class="line">        ans &#x3D; []</span><br><span class="line">        def backtrack(S, left, right):</span><br><span class="line">            if len(S) &#x3D;&#x3D; 2 * n:</span><br><span class="line">                ans.append(&#39;&#39;.join(S))</span><br><span class="line">                return</span><br><span class="line">            if left &lt; n:</span><br><span class="line">                S.append(&#39;(&#39;)</span><br><span class="line">                backtrack(S, left+1, right)</span><br><span class="line">                S.pop()</span><br><span class="line">            if right &lt; left:</span><br><span class="line">                S.append(&#39;)&#39;)</span><br><span class="line">                backtrack(S, left, right+1)</span><br><span class="line">                S.pop()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        backtrack([], 0, 0)</span><br><span class="line">        return ans</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">作者：LeetCode-Solution</span><br><span class="line">链接：https:&#x2F;&#x2F;leetcode-cn.com&#x2F;problems&#x2F;generate-parentheses&#x2F;solution&#x2F;gua-hao-sheng-cheng-by-leetcode-solution&#x2F;</span><br><span class="line">来源：力扣（LeetCode）</span><br><span class="line">著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</span><br></pre></td></tr></table></figure>
+<p><strong>方法三：按括号序列的长度递归</strong></p>
+<p><strong>思路与算法</strong></p>
+<p>任何一个括号序列都一定是由 ( 开头，并且第一个 ( 一定有一个唯一与之对应的 )。这样一来，每一个括号序列可以用 (a)b 来表示，其中 a 与 b 分别是一个合法的括号序列（可以为空）。</p>
+<p>那么，要生成所有长度为 2 * n 的括号序列，我们定义一个函数 generate(n) 来返回所有可能的括号序列。那么在函数 generate(n) 的过程中：</p>
+<p>我们需要枚举与第一个 ( 对应的 ) 的位置 2 * i + 1；</p>
+<p>递归调用 generate(i) 即可计算 a 的所有可能性；</p>
+<p>递归调用 generate(n - i - 1) 即可计算 b 的所有可能性；</p>
+<p>遍历 a 与 b 的所有可能性并拼接，即可得到所有长度为 2 * n 的括号序列。</p>
+<p>为了节省计算时间，我们在每次 generate(i) 函数返回之前，把返回值存储起来，下次再调用 generate(i) 时可以直接返回，不需要再递归计算。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">class Solution:</span><br><span class="line">    def generateParenthesis(self, n: int) -&gt; List[str]:</span><br><span class="line">        if n &#x3D;&#x3D; 0:</span><br><span class="line">            return [&#39;&#39;]</span><br><span class="line">        ans &#x3D; []</span><br><span class="line">        for c in range(n):</span><br><span class="line">            for left in self.generateParenthesis(c):</span><br><span class="line">                for right in self.generateParenthesis(n-1-c):</span><br><span class="line">                    ans.append(&#39;(&#123;&#125;)&#123;&#125;&#39;.format(left, right))</span><br><span class="line">        return ans</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">作者：LeetCode-Solution</span><br><span class="line">链接：https:&#x2F;&#x2F;leetcode-cn.com&#x2F;problems&#x2F;generate-parentheses&#x2F;solution&#x2F;gua-hao-sheng-cheng-by-leetcode-solution&#x2F;</span><br><span class="line">来源：力扣（LeetCode）</span><br><span class="line">著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</span><br></pre></td></tr></table></figure>
+<p>个人觉得第三种方法就比较好，代码简单，而且理解起来也不算太难。</p>
+<h2 id="精选题解："><a href="#精选题解：" class="headerlink" title="精选题解："></a>精选题解：</h2><p><strong>方法三：动态规划</strong></p>
+<p>参考了本题的 「官方题解」 中的 “闭合数方法” 和 「精选题解」，同样的方法也可以用来完成 「力扣」第 95 题：“不同的二叉搜索树 II”。</p>
+<p>第 1 步：定义状态 dp[i]：使用 i 对括号能够生成的组合。</p>
+<p>注意：每一个状态都是列表的形式。</p>
+<p>第 2 步：状态转移方程：</p>
+<p>i 对括号的一个组合，在 i - 1 对括号的基础上得到，这是思考 “状态转移方程” 的基础；</p>
+<p>i 对括号的一个组合，一定以左括号 “(“ 开始，不一定以 “)” 结尾。为此，我们可以枚举新的右括号 “)” 可能所处的位置，得到所有的组合；</p>
+<p>枚举的方式就是枚举左括号 “(“ 和右括号 “)” 中间可能的合法的括号对数，而剩下的合法的括号对数在与第一个左括号 “(“ 配对的右括号 “)” 的后面，这就用到了以前的状态。</p>
+<p>状态转移方程是：</p>
+<p>dp[i] = “(“ + dp[可能的括号对数] + “)” + dp[剩下的括号对数]</p>
+<p>“可能的括号对数” 与 “剩下的括号对数” 之和得为 i - 1（感谢 @xuyik 朋友纠正了我的错误），故 “可能的括号对数” j 可以从 0 开始，最多不能超过 i， 即 i - 1；</p>
+<p>“剩下的括号对数” + j = i - 1，故 “剩下的括号对数” = i - j - 1。</p>
+<p>整理得：</p>
+<p>dp[i] = “(“ + dp[j] + “)” + dp[i- j - 1] , j = 0, 1, …, i - 1</p>
+<p>第 3 步： 思考初始状态和输出：</p>
+<p>初始状态：因为我们需要 0 对括号这种状态，因此状态数组 dp 从 0 开始，0 个括号当然就是 [“”]。</p>
+<p>输出：dp[n] 。</p>
+<p>这个方法暂且就叫它动态规划，这么用也是很神奇的，它有下面两个特点：</p>
+<p>1、自底向上：从小规模问题开始，逐渐得到大规模问题的解集；</p>
+<p>2、无后效性：后面的结果的得到，不会影响到前面的结果。</p>
+<p>作者：liweiwei1419</p>
+<p>链接：<a href="https://leetcode-cn.com/problems/generate-parentheses/solution/hui-su-suan-fa-by-liweiwei1419/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/generate-parentheses/solution/hui-su-suan-fa-by-liweiwei1419/</a></p>
+<p>来源：力扣（LeetCode）</p>
+<p>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">from typing import List</span><br><span class="line"></span><br><span class="line">class Solution:</span><br><span class="line">    def generateParenthesis(self, n: int) -&gt; List[str]:</span><br><span class="line">        if n &#x3D;&#x3D; 0:</span><br><span class="line">            return []</span><br><span class="line">        dp &#x3D; [None for _ in range(n + 1)]</span><br><span class="line">        dp[0] &#x3D; [&quot;&quot;]</span><br><span class="line">        for i in range(1, n + 1):</span><br><span class="line">            cur &#x3D; []</span><br><span class="line">            for j in range(i):</span><br><span class="line">                left &#x3D; dp[j]</span><br><span class="line">                right &#x3D; dp[i - j - 1]</span><br><span class="line">                for s1 in left:</span><br><span class="line">                    for s2 in right:</span><br><span class="line">                        cur.append(&quot;(&quot; + s1 + &quot;)&quot; + s2)</span><br><span class="line">            dp[i] &#x3D; cur</span><br></pre></td></tr></table></figure>
+<pre><code>    return dp[n]
+</code></pre><p>仔细看来，这个动态规划的思想和官方题解的方法三是十分相似的逻辑。<br><strong>DFS</strong></p>
+<p>我们可以看成树形结构的深度优先搜索。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">from typing import List</span><br><span class="line">class Solution:</span><br><span class="line">	def generateParenthesis(self, n:int)-&gt; List[str]:</span><br><span class="line">		res &#x3D; []</span><br><span class="line">		cur_str &#x3D; &#39;&#39;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">		def dfs(cur_str, left, right):</span><br><span class="line">			&quot;&quot;&quot;</span><br><span class="line">            :param cur_str: 从根结点到叶子结点的路径字符串</span><br><span class="line">            :param left: 左括号还可以使用的个数</span><br><span class="line">            :param right: 右括号还可以使用的个数</span><br><span class="line">            :return:</span><br><span class="line">            &quot;&quot;&quot;</span><br><span class="line">            if left &#x3D;&#x3D; 0 and right &#x3D;&#x3D; 0:</span><br><span class="line">            	res.append(cur_str)</span><br><span class="line">            	return</span><br><span class="line">            if right&lt;left:</span><br><span class="line">            	return</span><br><span class="line">            if left&gt;0:</span><br><span class="line">            	dfs(cur_str+&#39;(&#39;,left-1,right) </span><br><span class="line">            if right&gt;0:</span><br><span class="line">            	dfs(cur_str+&#39;)&#39;,left,right-1)</span><br><span class="line">            dfs(cur_str, n,n)</span><br><span class="line">            return res</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/08/%E9%9D%A2%E8%AF%95%E9%A2%9813.%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%9A%84%E8%BF%90%E5%8A%A8%E8%8C%83%E5%9B%B4/" rel="prev" title="LeetCode 面试题13 机器人的运动范围">
+      <i class="fa fa-chevron-left"></i> LeetCode 面试题13 机器人的运动范围
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#题目"><span class="nav-number">1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解析"><span class="nav-number">2.</span> <span class="nav-text">解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#精选题解："><span class="nav-number">3.</span> <span class="nav-text">精选题解：</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="SAKURA"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">SAKURA</p>
+  <div class="site-description" itemprop="description">CS, AI, Daily Life</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">SAKURA</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
